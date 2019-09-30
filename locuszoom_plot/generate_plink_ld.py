@@ -8,13 +8,14 @@
 import os
 import sys
 
-from parallel_task_database.liteweight_worker import invoke_system as invoke_system
+
 
 
 ################################################################################
 ### MAGIC ENVIRONMENT MODULE STUFF
 ### Automatically load plink environment module when this module is loaded
 
+# TODO cleanup
 sys.path.insert(0,"/app/Lmod/lmod/lmod/init")
 from env_modules_python import module
 module('load','plink')
@@ -24,9 +25,8 @@ module('load','plink')
 ################################################################################
 
 
-LOCUSZOOM_1000G_DIR = "/fh/fast/lampe_j/Gut_Bugs/keith-working/locuszoom-1.4/locuszoom/data/1000G/genotypes/2014-10-14" # EUR
+# LOCUSZOOM_1000G_DIR = "locuszoom-1.4/locuszoom/data/1000G/genotypes/2014-10-14" # EUR
 
-# ancestries_to_check = [ "AFR", "ASN", "AMR", "EUR"]
 
 ################################################################################
 
@@ -34,14 +34,20 @@ LOCUSZOOM_1000G_DIR = "/fh/fast/lampe_j/Gut_Bugs/keith-working/locuszoom-1.4/loc
 
 
 
-def generate_plink_ld_file(output_file, ancestry, chromosome_text, target_variant, window_kb=1000):
-    known_sets = set(["AFR", "ASN", "AMR", "EUR", "SAN"])
+def generate_plink_ld_file(output_file, ancestry, chromosome_text, target_variant, locuszoom_template=None, window_kb=1000):
+    #known_sets = set(["AFR", "ASN", "AMR", "EUR", "SAN"])
 
-    if ancestry not in known_sets:
-        raise Exception("ERROR unknown ancestry: {a}".format(a=ancestry))
+    #if ancestry not in known_sets:
+    #    raise Exception("ERROR unknown ancestry: {a}".format(a=ancestry))
+
+    if None == locuszoom_template:
+        raise Exception("ERROR locuszoom template for files not specified, expecting format like '/path/{ancestry}/{chrom}'")
+
+    plink_bed_file_prefix = locuszoom_template.format(ancestry=ancestry, chrom=chromosome_text)
+
 
     params = [ "plink",
-               "--bfile", os.path.join(LOCUSZOOM_1000G_DIR, ancestry, chromosome_text),
+               "--bfile", plink_bed_file_prefix
                "--r2",
                "--ld-snp", target_variant,
                "--ld-window-kb", str(window_kb),
@@ -62,5 +68,3 @@ def generate_plink_ld_file(output_file, ancestry, chromosome_text, target_varian
     os.rename(plink_out, output_file)
 
 
-if "__main__" == __name__:
-    generate_plink_ld_file("test.ld", "EUR", "chr11", "chr11:74898804")

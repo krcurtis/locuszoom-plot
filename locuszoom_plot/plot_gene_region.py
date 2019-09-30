@@ -12,9 +12,9 @@ import matplotlib.gridspec as gridspec
 
 ################################################################################
 
-OUTPUT_PLOT="/fh/fast/lampe_j/Gut_Bugs/keith-working/t503-work/test_gene_plot.png"
 
-LOCUSZOOM_GENE = "/fh/fast/peters_u/GECCO_Working/keithworking/locuszoom1.4_data/locuszoom/data/database/locuszoom_hg19.db"
+
+# LOCUSZOOM_GENE = "locuszoom1.4_data/locuszoom/data/database/locuszoom_hg19.db"
 
 
 ################################################################################
@@ -87,8 +87,8 @@ def sort_gene_locations(gene_frame, position_min, position_max):
 
 
 
-def load_gene_region_info(chromosome, position_min, position_max):
-    conn = sqlite3.connect(LOCUSZOOM_GENE)
+def load_gene_region_info(chromosome, position_min, position_max, locuszoom_gene_db):
+    conn = sqlite3.connect(locuszoom_gene_db)
 
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM refFlat where refFlat.chrom='{chrom}';".format(chrom=chromosome))
@@ -179,22 +179,4 @@ def plot_gene_region(output_plot, gene_rows, position_min, position_max):
     else:
         pyplot.show()
     pyplot.close(mainfig)
-
-
-
-
-if "__main__" == __name__:
-    #pos = 74898804
-    #region_info = load_gene_region_info('chr11', pos - 1000000, pos + 1000000)
-    #gene_rows = sort_gene_locations(region_info, pos - 1000000, pos + 1000000)
-    #plot_gene_region(OUTPUT_PLOT, gene_rows, pos - 1000000, pos + 1000000)
-
-    pos = 111200000
-    #pos_min = pos - 1000000
-    #pos_max = pos + 1000000
-    pos_min = 110700000
-    pos_max = 111700000
-    region_info = load_gene_region_info('chr1', pos_min, pos_max)
-    gene_rows = sort_gene_locations(region_info, pos_min, pos_max)
-    plot_gene_region(OUTPUT_PLOT, gene_rows, pos_min, pos_max)
 

@@ -18,15 +18,6 @@ from matplotlib.patches import Rectangle
 
 ################################################################################
 
-OUTPUT_PLOT = "/fh/fast/lampe_j/Gut_Bugs/keith-working/t503-work/test_pvalue.png"
-
-PVALUE_FILE = "/fh/fast/lampe_j/Gut_Bugs/keith-working/t503-work/Microbiome_regression_chr11_bug86_14p_5212s_merged_idsuf.vcf.blk01.csv"
-
-PLINK_LD_FILE = "/fh/fast/lampe_j/Gut_Bugs/keith-working/t503-work/plink.ld"
-
-# too new?? LOCUSZOOM_PLINK_1000G_EUR_DIR = "/fh/fast/lampe_j/Gut_Bugs/keith-working/locuszoom-1.4/locuszoom/data/1000G/genotypes/2017-04-10/EUR"
-# This one has the target snp at 74898804 /fh/fast/lampe_j/Gut_Bugs/keith-working/locuszoom-1.4/locuszoom/data/1000G/genotypes/2014-10-14/EUR
-
 LD_REGIMES =  [  (0,   0.2, (0,0,0x80)),
                  (0.2, 0.4, (0x87,0xce, 0xfa)),
                  (0.4, 0.6, (0x00,0xff, 0x00)),
@@ -35,8 +26,6 @@ LD_REGIMES =  [  (0,   0.2, (0,0,0x80)),
 ]
 
 
-# rs114168536	11	74898804
-# 11	74898804	A	T  # is this chromosome, position, ref allele, alt allele???
 
 ################################################################################
 
@@ -228,18 +217,3 @@ def plot_r2_region(output_plot, pvalue_ld_frame, target_variant, position_min, p
 
 
 
-
-if "__main__" == __name__:
-    target_variant = "chr11:74898804"
-    pos = 74898804
-    position_min = pos - 1000000
-    position_max = pos + 1000000
-
-
-    pvalue_frame = load_and_format_pvalue_file_custom(PVALUE_FILE, target_variant, position_min, position_max)
-    ld_frame = load_plink_r2_results_file(PLINK_LD_FILE, target_variant, position_min, position_max)
-
-    pvalue_ld_result = merge_pvalue_ld(pvalue_frame, ld_frame)
-
-
-    plot_r2_region(OUTPUT_PLOT, pvalue_ld_result, target_variant, position_min, position_max, "rs114168536")

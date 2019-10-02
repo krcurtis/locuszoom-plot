@@ -47,7 +47,7 @@ def generate_plink_ld_file(output_file, ancestry, chromosome_text, target_varian
 
 
     params = [ "plink",
-               "--bfile", plink_bed_file_prefix
+               "--bfile", plink_bed_file_prefix,
                "--r2",
                "--ld-snp", target_variant,
                "--ld-window-kb", str(window_kb),

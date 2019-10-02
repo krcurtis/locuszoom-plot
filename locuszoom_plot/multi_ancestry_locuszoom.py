@@ -31,12 +31,12 @@ from .plot_r2_region import window_pvalue
 ################################################################################
 
 
-def multi_ancestry_locuszoom(pvalue_frame, ancestry_file_set, target_variant, target_pos, fancy_name, output_plot=None, output_pdf=None, title=None):
+def multi_ancestry_locuszoom(pvalue_frame, ancestry_file_set, target_variant, target_pos, fancy_name, output_plot=None, output_pdf=None, title=None, locuszoom_gene_db=None):
 
     target_chromosome = target_variant.split(":")[0]
     position_min = target_pos - 1000000
     position_max = target_pos + 1000000
-    region_info = load_gene_region_info(target_chromosome, position_min, position_max)
+    region_info = load_gene_region_info(target_chromosome, position_min, position_max, locuszoom_gene_db)
     gene_rows = sort_gene_locations(region_info, position_min, position_max)
 
 

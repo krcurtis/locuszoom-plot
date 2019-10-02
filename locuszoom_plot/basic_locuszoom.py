@@ -29,17 +29,17 @@ from .plot_r2_region import merge_pvalue_ld
 ################################################################################
 
 
-def basic_locuszoom(pvalue_file, plink_file, target_variant, target_pos, fancy_name, output_plot=None, output_pdf=None, title=None):
+def basic_locuszoom(pvalue_frame, plink_file, target_variant, target_pos, fancy_name, target_window_size=1000000,
+                    output_plot=None, output_pdf=None, title=None, locuszoom_gene_db=None):
 
     target_chromosome = target_variant.split(":")[0]
-    position_min = target_pos - 1000000
-    position_max = target_pos + 1000000
-    region_info = load_gene_region_info(target_chromosome, position_min, position_max)
+    position_min = target_pos - (target_window_size)
+    position_max = target_pos + (target_window_size)
+    region_info = load_gene_region_info(target_chromosome, position_min, position_max, locuszoom_gene_db)
     gene_rows = sort_gene_locations(region_info, position_min, position_max)
 
 
 
-    pvalue_frame = load_and_format_pvalue_file_custom(pvalue_file, target_variant, position_min, position_max)
     ld_frame = load_plink_r2_results_file(plink_file, target_variant, position_min, position_max)
     pvalue_ld_result = merge_pvalue_ld(pvalue_frame, ld_frame)
 
@@ -52,7 +52,7 @@ def basic_locuszoom(pvalue_file, plink_file, target_variant, target_pos, fancy_n
 
     plot_gene_region_worker(gene_axes, gene_rows, position_min, position_max)
 
-    colorbar_magic(mainfig)
+    colorbar_magic(mainfig, 1)
 
     if None != title:
         mainfig.suptitle(title)

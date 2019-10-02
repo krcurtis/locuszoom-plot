@@ -112,7 +112,10 @@ def colorbar_magic(figure, n_plots):
     #pyplot.gca().add_patch(Rectangle((0.1, 45), 40, 55, edgecolor='gray',
     #                                        linewidth=3, fill=False))
 
-    positioning_top = 0.67 + 0.15+ 0.04
+    if 1 == n_plots:
+        positioning_top = 0.67 + 0.15
+    else:
+        positioning_top = 0.67 + 0.15+ 0.04
     positioning_magic = [0.15, positioning_top - 0.15/n_plots, 0.015, 0.16/n_plots] ## this position seems a bit magical and is probably liable to break
     fontsize_magic = 7 # 8 works for one plot but seems perhaps a little big
 

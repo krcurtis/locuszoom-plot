@@ -1,4 +1,5 @@
-# Copyright 2019 Fred Hutchinson Cancer Research Center
+# Copyright 2019, 2021 Fred Hutchinson Cancer Research Center
+
 ################################################################################
 ### Helper functions to generate LD info using PLINK and the 1000G
 ### data provided with LocusZoom 1.4
@@ -15,10 +16,10 @@ import sys
 ### MAGIC ENVIRONMENT MODULE STUFF
 ### Automatically load plink environment module when this module is loaded
 
-# TODO cleanup
-sys.path.insert(0,"/app/Lmod/lmod/lmod/init")
-from env_modules_python import module
-module('load','plink')
+if "LMOD_PACKAGE_PATH" in os.environ:
+    sys.path.insert(0, os.path.join(os.environ["LMOD_PACKAGE_PATH"], "lmod/init"))
+    from env_modules_python import module
+    module('load','plink')
 
 
 
@@ -31,6 +32,11 @@ module('load','plink')
 ################################################################################
 
 
+def invoke_system(command_parameters):
+    cmd = ' '.join(command_parameters)
+    errcode = os.system(cmd)
+    if 0 != errcode:
+        raise Exception("ERROR: failed (returns {errcode}):".format(errcode=errcode) + cmd + '\n')
 
 
 

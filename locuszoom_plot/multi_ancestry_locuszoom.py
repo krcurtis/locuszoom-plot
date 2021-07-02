@@ -66,8 +66,8 @@ def multi_ancestry_locuszoom(pvalue_frame, ancestry_file_set, target_variant, ta
 
     colorbar_magic(mainfig, n_ancestry)
 
-    #if None != title:
-    #    mainfig.suptitle(title)
+    if None != title:
+        mainfig.suptitle(title)
 
     if None != output_plot:
         pyplot.savefig(output_plot, bbox_inches='tight');
